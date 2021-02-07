@@ -45,7 +45,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void testAddLogin() {
+	void testAddLogin() {
 		// userName, "1234", 'U', user.getUserId()
 
 		Login login = new Login("shch", "1234", 'U', 23);
@@ -54,7 +54,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void testGetCompanyByRating() {
+	void testGetCompanyByRating() {
 		String orgRating = "A+";
 		when(orgRepositary.findAllByOrgRating(orgRating))
 				.thenReturn(Stream.of(new Organization(1, "Cap", "A+", "Capgemini India", "capg123@gmail.com", 11,
@@ -64,7 +64,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void testGetCompanyByName() {
+	void testGetCompanyByName() {
 		String orgName = "Capgemini";
 
 		List<Organization> listOrg = Stream.of(
@@ -80,7 +80,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void testGetCompanyById() {
+	void testGetCompanyById() {
 		int orgId = 2;
 		List<Organization> listOrgg = Stream.of(
 				new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2, "international",
@@ -96,7 +96,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void testAddLoginFail() {
+	void testAddLoginFail() {
 
 		Login login = new Login(" ", "1234", 'U', 23);
 		when(loginrepository.save(login)).thenReturn(login);
@@ -104,7 +104,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void testAddUserFail() {
+	void testAddUserFail() {
 		User u = new User(15, "Pooja", "Vaidya", "Pooja@123", "pooja28@gmail.com", "9876543223", "Mumbai");
 		when(userRepository.save(u)).thenReturn(u);
 		User u1 = new User(16, "Riya", "Vaidya", "Riya@123", "riya28@gmail.com", "8976543223", "Pune");
@@ -113,7 +113,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void testGetCompanyByNameFail() {
+	void testGetCompanyByNameFail() {
 		String orgName = "Capgemini";
 
 		List<Organization> listOrg = Stream.of(
@@ -129,7 +129,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void testGetCompanyByRatingFail() {
+	void testGetCompanyByRatingFail() {
 		String orgRating = "A+";
 		when(orgRepositary.findAllByOrgRating(orgRating))
 				.thenReturn(Stream.of(new Organization(1, "Cap", "A", "Capgemini India", "capg123@gmail.com", 11,
@@ -139,7 +139,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void testGetCompanyByIdFail() {
+	void testGetCompanyByIdFail() {
 		int orgId = 2;
 		List<Organization> listOrgg = Stream.of(
 				new Organization(4, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2, "international",

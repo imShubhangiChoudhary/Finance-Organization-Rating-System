@@ -33,7 +33,7 @@ public class OrganizationServiceTest {
 	LoginRepository loginRepository;
 
 	@Test
-	public void testAddOrganization() {
+	void testAddOrganization() {
 
 		Organization organization = new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2,
 				"international", 45678, "A+", "Approved");
@@ -43,7 +43,7 @@ public class OrganizationServiceTest {
 	}
 
 	@Test
-	public void testGetOrganization() {
+	void testGetOrganization() {
 		List<Organization> listOrg = Stream.of(
 				new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2, "international",
 						45678, "A+", "Approved"),
@@ -58,7 +58,7 @@ public class OrganizationServiceTest {
 	}
 
 	@Test
-	public void testAddLogin() {
+	void testAddLogin() {
 
 		Login login = new Login("HDF", "1234", 'O', 3);
 
@@ -67,46 +67,26 @@ public class OrganizationServiceTest {
 	}
 
 	@Test
-	public void testRemove() {
-	List<Organization> listOrg=Stream.of(
-			new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2, "international",
-					45678, "A+", "Approved"),
-			new Organization(3, "HDFC", "A", "Private corporation", "hdfcbank8@gmail.com", 3, "national", 98678,
-					"A", "Approved"))
-			.collect(Collectors.toList());
-	
-	List<Login> listLogin=Stream.of(
-			new Login("HDF","1234",'O',3),
-			new Login("SBI","1234",'O',4))
-			.collect(Collectors.toList());
-	
-	orgRepository.saveAll(listOrg);
-	loginRepository.saveAll(listLogin);
-	
-	when(orgRepository.save(listOrg.get(1))).thenReturn(listOrg.get(1));
-	assertEquals(listOrg.get(1), service.remove(listOrg.get(1)));
+	void testRemove() {
+		List<Organization> listOrg = Stream.of(
+				new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2, "international",
+						45678, "A+", "Approved"),
+				new Organization(3, "HDFC", "A", "Private corporation", "hdfcbank8@gmail.com", 3, "national", 98678,
+						"A", "Approved"))
+				.collect(Collectors.toList());
+
+		List<Login> listLogin = Stream.of(new Login("HDF", "1234", 'O', 3), new Login("SBI", "1234", 'O', 4))
+				.collect(Collectors.toList());
+
+		orgRepository.saveAll(listOrg);
+		loginRepository.saveAll(listLogin);
+
+		when(orgRepository.save(listOrg.get(1))).thenReturn(listOrg.get(1));
+		assertEquals(listOrg.get(1), service.remove(listOrg.get(1)));
 	}
 
 	@Test
-	public void testUpdateInterestRate() {
-
-		Organization organization = new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2,
-				"international", 45678, "A+", "Approved");
-		when(orgRepository.save(organization)).thenReturn(organization);
-		assertEquals(organization, service.updateInterestRate(organization));
-	}
-	
-	@Test
-	public void testUpdateScope() {
-
-		Organization organization = new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2,
-				"international", 45678, "A+", "Approved");
-		when(orgRepository.save(organization)).thenReturn(organization);
-		assertEquals(organization, service.updateInterestRate(organization));
-	}
-	
-	@Test
-	public void testUpdateGrossIncome() {
+	void testUpdateInterestRate() {
 
 		Organization organization = new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2,
 				"international", 45678, "A+", "Approved");
@@ -115,7 +95,25 @@ public class OrganizationServiceTest {
 	}
 
 	@Test
-	public void testupdateScopeFail() {
+	void testUpdateScope() {
+
+		Organization organization = new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2,
+				"international", 45678, "A+", "Approved");
+		when(orgRepository.save(organization)).thenReturn(organization);
+		assertEquals(organization, service.updateInterestRate(organization));
+	}
+
+	@Test
+	void testUpdateGrossIncome() {
+
+		Organization organization = new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2,
+				"international", 45678, "A+", "Approved");
+		when(orgRepository.save(organization)).thenReturn(organization);
+		assertEquals(organization, service.updateInterestRate(organization));
+	}
+
+	@Test
+	void testupdateScopeFail() {
 
 		Organization organization = new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 0,
 				"international", 45678, "A+", "Approved");
@@ -124,7 +122,7 @@ public class OrganizationServiceTest {
 	}
 
 	@Test
-	public void testupdateGrossIncomeFail() {
+	void testupdateGrossIncomeFail() {
 
 		Organization organization = new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 0,
 				"international", 45678, "A+", "Approved");
@@ -133,7 +131,7 @@ public class OrganizationServiceTest {
 	}
 
 	@Test
-	public void testUpdateInterestRateFail() {
+	void testUpdateInterestRateFail() {
 
 		Organization organization = new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 0,
 				"international", 45678, "A+", "Approved");
@@ -142,7 +140,7 @@ public class OrganizationServiceTest {
 	}
 
 	@Test
-	public void testAddOrganizationFail() {
+	void testAddOrganizationFail() {
 
 		Organization organization = new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2,
 				"international", 45678, "A+", "Approved");
@@ -155,7 +153,7 @@ public class OrganizationServiceTest {
 	}
 
 	@Test
-	public void testGetOrganizationFail() {	
+	void testGetOrganizationFail() {
 		List<Organization> listOrg = Stream.of(
 				new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2, "international",
 						45678, "A+", "Approved"),
@@ -169,30 +167,28 @@ public class OrganizationServiceTest {
 	}
 
 	@Test
-	public void testAddLoginFail() {	
-		
+	void testAddLoginFail() {
+
 		Login login = null;
 		when(loginRepository.save(login)).thenReturn(null);
 		assertEquals(login, service.addLogin(login));
 	}
-	
-	public void testRemoveException() {
-		List<Organization> listOrg=Stream.of(
+
+	void testRemoveException() {
+		List<Organization> listOrg = Stream.of(
 				new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2, "international",
 						45678, "A+", "Approved"),
 				new Organization(3, "HDFC", "A", "Private corporation", "hdfcbank8@gmail.com", 3, "national", 98678,
 						"A", "Approved"))
 				.collect(Collectors.toList());
-		
-		List<Login> listLogin=Stream.of(
-				new Login("HDF","1234",'O',3),
-				new Login("SBI","1234",'O',4))
+
+		List<Login> listLogin = Stream.of(new Login("HDF", "1234", 'O', 3), new Login("SBI", "1234", 'O', 4))
 				.collect(Collectors.toList());
-		
+
 		orgRepository.saveAll(listOrg);
 		loginRepository.saveAll(listLogin);
-		
+
 		when(orgRepository.save(listOrg.get(1))).thenReturn(listOrg.get(1));
 		assertNotEquals(listOrg.get(1), service.remove(listOrg.get(1)));
-		}
+	}
 }

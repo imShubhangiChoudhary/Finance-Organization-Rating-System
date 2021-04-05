@@ -1,5 +1,6 @@
 package com.frs.service.test;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.when;
@@ -15,19 +16,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.frs.model.Feedback;
-import com.frs.repository.FeedbackRepository;
+import com.frs.repository.IFeedbackRepository;
 import com.frs.service.IFeedbackService;
 
 @SpringBootTest
-public class FeedbackServiceTest {
+class FeedbackServiceTest {
 
+	
 	@Autowired
 
 	IFeedbackService feedbackService;
 
 	@MockBean
-	FeedbackRepository feedbackRepository;
+	IFeedbackRepository feedbackRepository;
 
+	
 	@Test
 	void testViewFeedback() {
 		// userId, int organizationId, String feedbackVal
@@ -51,11 +54,41 @@ public class FeedbackServiceTest {
 		when(feedbackRepository.save(feedback)).thenReturn(feedback);
 		assertEquals(feedback, feedbackService.addFeedback(feedback));
 	}
+	
+	@Test
+	void viewFeedbackForOrgTest() {
+		List<Feedback> listFeedback = Stream
+				.of(new Feedback(10, 1, 2, "Good"), new Feedback(11, 1, 3, "Excellent"), 
+						new Feedback(12, 9, 2, "Good"),new Feedback(13, 4, 5, "Bad"))
+				.collect(Collectors.toList());
 
+		feedbackRepository.saveAll(listFeedback);
+	//	List<Feedback>result=;
+		when(feedbackRepository.findAllByOrganizationId(2)).
+		thenReturn(Stream.of(listFeedback.get(0),listFeedback.get(2))
+				.collect(Collectors.toList()));
+		assertEquals(Stream.of(listFeedback.get(0),listFeedback.get(2))
+				.collect(Collectors.toList()), feedbackService.viewFeedbackForOrg(2));
+	}
+	
+	@Test
+	void viewFeedbackForOrgFail() {
+		List<Feedback> listFeedback = Stream
+				.of(new Feedback(10, 1, 2, "Good"), new Feedback(11, 1, 3, "Excellent"), 
+						new Feedback(12, 9, 2, "Good"),new Feedback(13, 4, 5, "Bad"))
+				.collect(Collectors.toList());
+
+		feedbackRepository.saveAll(listFeedback);
+
+		when(feedbackRepository.findAllByOrganizationId(10)).thenReturn(null);
+		assertNull(feedbackService.viewFeedbackForOrg(10));
+	}
+	
 	@Test
 	void testViewFeedbackException() {
 		List<Feedback> feedback = Stream.of(new Feedback(1, 9, "Awesome"), new Feedback(1, 30, "Good"))
 				.collect(Collectors.toList());
+		
 		Mockito.when(feedbackService.viewFeedback(1)).thenReturn(feedback);
 		assertNotEquals(feedback, feedbackService.viewFeedback(0));
 	}

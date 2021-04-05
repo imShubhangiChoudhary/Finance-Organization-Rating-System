@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.frs.model.Organization;
 
 @Repository
-public interface OrganizationRepository extends JpaRepository<Organization, Integer>{
+public interface IOrganizationRepository extends JpaRepository<Organization, Integer>{
 
 	List<Organization> findAllByOrgRating(String orgRating);
 

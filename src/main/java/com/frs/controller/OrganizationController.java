@@ -2,22 +2,27 @@ package com.frs.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.Query;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.frs.exception.NotFoundException;
 import com.frs.exception.OrgExceptionMessage;
 import com.frs.model.Feedback;
+import com.frs.model.FinAppRequest;
 import com.frs.model.Login;
 import com.frs.model.Organization;
 import com.frs.service.FeedbackService;
@@ -37,17 +42,19 @@ import io.swagger.annotations.ApiResponses;
  *
  */
 
-@Api(value = "Controller", description = "Handler methods related to Organization!!!!")
+@Api(value = "Controller")
 @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
 		@ApiResponse(code = 400, message = "Bad request"), @ApiResponse(code = 500, message = "Internal server error"),
 		@ApiResponse(code = 404, message = "Not found") })
 @RestController
+@RequestMapping(path = "api")
+@CrossOrigin
 public class OrganizationController {
 
 	@Autowired
 	IOrganizationService service;
 	@Autowired
-	OrganizationSetConditions setCondition;
+	OrganizationUtility setCondition;
 	@Autowired
 	FeedbackService feedbackService;
 	Logger logger = LoggerFactory.getLogger(OrganizationController.class);
@@ -62,16 +69,17 @@ public class OrganizationController {
 	@ApiOperation(value = "To register new Organization", response = Organization.class)
 	@PostMapping("/registerOrganization")
 	public ResponseEntity<String> addOrganization(@Valid @RequestBody Organization organization) {
-		String rating = setCondition.setRating(organization.getInterestRate(), organization.getGrossIncome(),
+		//Organization organization = finAppRequest.getOrganization();
+		String rating = setCondition.generateRating(organization.getInterestRate(), organization.getGrossIncome(),
 				organization.getScope());
 		organization.setOrgRating(rating);
-		String status = setCondition.setStatus(organization.getOrgUserRating(), rating);
+		String status = setCondition.generateStatus(organization.getOrgUserRating(), rating);
 		organization.setStatus(status);
 		Organization result = service.addOrganization(organization);
 		String userName = organization.getOrgName().substring(0, 3) + result.getOrgId();
 		Login login = new Login(userName, "1234", 'O', organization.getOrgId());
 		Login resultLogin = service.addLogin(login);
-		logger.info("New Organization added successfully with id "+result.getOrgId());
+		logger.info("New Organization added successfully");
 		return new ResponseEntity<>("New organization added with id " + result.getOrgId() + ". Your username is "
 				+ resultLogin.getUserName() + " and password is " + resultLogin.getPassword(), HttpStatus.OK);
 	}
@@ -90,14 +98,14 @@ public class OrganizationController {
 			@RequestBody Organization organization) {
 		Organization org = service.getOrganization(id);
 		if (org == null) {
-			logger.warn(OrgExceptionMessage.MESSAGE + id);
+			logger.warn(OrgExceptionMessage.MESSAGE);
 			throw new NotFoundException(OrgExceptionMessage.MESSAGE + id);
 		} else {
+			//Organization organization = finAppRequest.getOrganization();
 			org.setGrossIncome(organization.getGrossIncome());
-
 		}
 		Organization organizationGrossIncome = service.updateGrossIncome(org);
-		logger.info("Gross income of Organization with id " + id + " updated successfully");
+		logger.info("Gross income of Organization updated successfully");
 		return new ResponseEntity<>(organizationGrossIncome, HttpStatus.OK);
 	}
 
@@ -114,16 +122,17 @@ public class OrganizationController {
 	@PutMapping("/updateScope/{id}")
 	public ResponseEntity<Organization> updateScope(@PathVariable("id") int id,
 			@RequestBody Organization organization) {
+		//Organization organization = finAppRequest.getOrganization();
 		Organization org = service.getOrganization(id);
 		if (org == null) {
-			logger.warn(OrgExceptionMessage.MESSAGE + id);
+			logger.warn(OrgExceptionMessage.MESSAGE);
 			throw new NotFoundException(OrgExceptionMessage.MESSAGE + id);
 		} else {
 			org.setScope(organization.getScope());
 		}
 		Organization organizationScope = service.updateScope(org);
-		logger.info("Scope of Organization with id " + id + " updated successfully");
-		
+		logger.info("Scope of Organization updated successfully");
+
 		return new ResponseEntity<>(organizationScope, HttpStatus.OK);
 	}
 
@@ -140,16 +149,17 @@ public class OrganizationController {
 	@PutMapping("/updateInterest/{id}")
 	public ResponseEntity<Organization> updateInterestRate(@PathVariable("id") int id,
 			@RequestBody Organization organization) {
+		//Organization organization = finAppRequest.getOrganization();
 		Organization org = service.getOrganization(id);
 		if (org == null) {
-			logger.warn(OrgExceptionMessage.MESSAGE + id);
+			logger.warn(OrgExceptionMessage.MESSAGE);
 			throw new NotFoundException(OrgExceptionMessage.MESSAGE + id);
 		} else {
 			org.setInterestRate(organization.getInterestRate());
 		}
 		Organization organizationInterest = service.updateInterestRate(org);
-		logger.info("Interest rate of Organization with id " + id + " updated successfully");
-		
+		logger.info("Interest rate of Organization updated successfully");
+
 		return new ResponseEntity<>(organizationInterest, HttpStatus.OK);
 
 	}
@@ -166,15 +176,15 @@ public class OrganizationController {
 	public String removeOrganization(@PathVariable("id") int id) {
 		Organization org = service.getOrganization(id);
 		if (org == null) {
-			logger.warn(OrgExceptionMessage.MESSAGE + id);
+			logger.warn(OrgExceptionMessage.MESSAGE);
 			throw new NotFoundException(OrgExceptionMessage.MESSAGE + id);
 		} else {
 			org.setStatus("Deleted");
 		}
 
 		Organization organizationRemove = service.remove(org);
-		logger.info("Organization with id " + id + " removed successfully");
-		
+		logger.info("Organization removed successfully");
+
 		return "The organization deleted succesfully with id " + organizationRemove.getOrgId();
 	}
 
@@ -189,17 +199,18 @@ public class OrganizationController {
 
 	@ApiOperation(value = "To update password of organization", response = Organization.class)
 	@PutMapping("/updateOrganizationPassword/{id}")
-	public ResponseEntity<Login> updatePassword(@PathVariable("id") int id, @RequestBody Login logins) {
+	public ResponseEntity<Login> updatePassword(@PathVariable("id") int id, @RequestBody Login logincredential) {
+		//Login loginRequest = finAppRequest.getLogin();
 		Login login = service.getLogin(id);
 		if (login == null) {
-			logger.warn(OrgExceptionMessage.MESSAGE + id);
+			logger.warn(OrgExceptionMessage.MESSAGE);
 			throw new NotFoundException(OrgExceptionMessage.MESSAGE + id);
 		} else {
-			login.setPassword(logins.getPassword());
+			login.setPassword(logincredential.getPassword());
 		}
 		Login organizationPassword = service.updatePassword(login);
-		logger.info("Password of Organization with id " + id + " updated successfully");
-		
+		logger.info("Password of Organization updated successfully");
+
 		return new ResponseEntity<>(organizationPassword, HttpStatus.OK);
 
 	}
@@ -220,15 +231,16 @@ public class OrganizationController {
 
 			List<Feedback> feedbacks = feedbackService.viewFeedbackForOrg(id);
 			if (feedbacks.isEmpty()) {
-				logger.warn("No feedback is given to organization with id " + id);
+				logger.warn("No feedback is given to organization");
 				throw new NotFoundException("No feedback is given to organization with id: " + id);
 			}
-			logger.info("Feedback displayed successfully for organization with id "+id);
-			
+			logger.info("Feedback displayed successfully for organization");
+
 			return new ResponseEntity<>(feedbacks, HttpStatus.OK);
 		} else {
-			logger.warn(OrgExceptionMessage.MESSAGE + id);
+			logger.warn("No Organization present with given id");
 			throw new NotFoundException(OrgExceptionMessage.MESSAGE + id);
+			
 		}
 	}
 
@@ -250,5 +262,32 @@ public class OrganizationController {
 		logger.info("Rating criteria displayed successfully");
 		return list;
 	}
-
+	@ApiOperation(value = "get login record by username and password", response = Organization.class)
+	@GetMapping("/login/{unm}/{upass}")
+	public ResponseEntity<Login> getLogin(@PathVariable String unm, @PathVariable String upass) {
+		Login result=service.getLoginRecord(unm, upass);
+		if(result==null) {
+			throw new NotFoundException("Login fail");
+		}
+		String message="Login Successful";
+		return new ResponseEntity<>(result,HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "View organization by Id", response = Organization.class)
+    @GetMapping("/showOrganizationById/{id}")
+    public ResponseEntity<Organization> showOrganizationById(@PathVariable int id) {
+        Organization org = service.getOrganization(id);
+        System.err.println(org);
+        return  new ResponseEntity<>(org, HttpStatus.OK);
+      
+           
+        }
+	@ApiOperation(value = "View organization", response = Organization.class)
+	@GetMapping("/showAllOrganization")
+	public ResponseEntity<List<Organization>> showAllOrganization() {
+		 List<Organization> list = service.getAllOrganization();
+		 return  new ResponseEntity<>(list, HttpStatus.OK);
+		
+			
+		}
 }

@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.frs.model.Login;
 import com.frs.model.Organization;
 import com.frs.model.User;
-import com.frs.repository.LoginRepository;
-import com.frs.repository.OrganizationRepository;
-import com.frs.repository.UserRepository;
+import com.frs.repository.ILoginRepository;
+import com.frs.repository.IOrganizationRepository;
+import com.frs.repository.IUserRepository;
 
 /**
  * Perform user related activities like Registering,Browsing,Updating
@@ -27,11 +27,11 @@ import com.frs.repository.UserRepository;
 public class UserService implements IUserService {
 
 	@Autowired
-	UserRepository repository;
+	IUserRepository repository;
 	@Autowired
-	OrganizationRepository orgRepository;
+	IOrganizationRepository orgRepository;
 	@Autowired
-	LoginRepository loginRepositary;
+	ILoginRepository loginRepositary;
 
 	/**
 	 * This method is used to add or registered new user record to user repository
@@ -63,9 +63,7 @@ public class UserService implements IUserService {
 	@Override
 	public Organization getCompanyById(int orgId) {
 
-		Organization org = orgRepository.findById(orgId);
-		return org;
-
+		return orgRepository.findById(orgId);
 	}
 
 	/**

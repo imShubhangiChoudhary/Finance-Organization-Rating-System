@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import com.frs.model.Feedback;
 
-@Repository
-public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
+@Repository	//IFee
+public interface IFeedbackRepository extends JpaRepository<Feedback, Integer> {
 
 	List<Feedback> findAllByUserId(int userId);
 	

@@ -46,8 +46,6 @@ public class Organization {
 	@Column(name = "gross_income")
 	private double grossIncome;
 
-	@Pattern(regexp = "A|A+|A++|B|B+|B++|C|C+|C++", message = " values must be A, A+, A++, B, B+, B++, C, C+, C++")
-	
 	@Column(name = "org_user_rating")
 	private String orgUserRating;
 
@@ -65,49 +63,21 @@ public class Organization {
 	 * @param orgUserRating
 	 * @param status
 	 */
-	public Organization(String orgName, String orgRating, String orgDescription, String email, double interestRate,
-			String scope, double grossIncome, String orgUserRating, String status) {
+	public Organization(String orgName, String orgDescription, String email, double interestRate,
+			String scope, double grossIncome, String orgUserRating) {
 		super();
 		this.orgName = orgName;
-		this.orgRating = orgRating;
 		this.orgDescription = orgDescription;
 		this.email = email;
 		this.interestRate = interestRate;
 		this.scope = scope;
 		this.grossIncome = grossIncome;
 		this.orgUserRating = orgUserRating;
-		this.status = status;
-	}
-
-	/**
-	 * @param orgId
-	 * @param orgName
-	 * @param orgRating
-	 * @param orgDescription
-	 * @param email
-	 * @param interestRate
-	 * @param scope
-	 * @param grossIncome
-	 * @param orgUserRating
-	 * @param status
-	 */
-	public Organization(int orgId, String orgName, String orgRating, String orgDescription, String email,
-			double interestRate, String scope, double grossIncome, String orgUserRating, String status) {
-		super();
-		this.orgId = orgId;
-		this.orgName = orgName;
-		this.orgRating = orgRating;
-		this.orgDescription = orgDescription;
-		this.email = email;
-		this.interestRate = interestRate;
-		this.scope = scope;
-		this.grossIncome = grossIncome;
-		this.orgUserRating = orgUserRating;
-		this.status = status;
+		
 	}
 
 	public Organization() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	/**
@@ -256,11 +226,6 @@ public class Organization {
 				+ ", orgDescription=" + orgDescription + ", email=" + email + ", interestRate=" + interestRate
 				+ ", scope=" + scope + ", grossIncome=" + grossIncome + ", orgUserRating=" + orgUserRating
 				+ ", status=" + status + "]";
-	}
-
-	public Organization orElse(Object object) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

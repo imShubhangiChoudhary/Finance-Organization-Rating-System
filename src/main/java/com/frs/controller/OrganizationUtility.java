@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class OrganizationSetConditions {
+public class OrganizationUtility {
 
 	/**
 	 * This method set rating to newly registered organization
@@ -23,13 +23,13 @@ public class OrganizationSetConditions {
 	 * @return
 	 */
 	
-	public String setRating(double orgInterestRate,double orgGrossIncome,String scope) {
+	public String generateRating(double orgInterestRate,double orgGrossIncome,String scope) {
 		 
 		String rating="";
 		if ((orgInterestRate <= 10 || orgInterestRate > 7) && scope.equalsIgnoreCase("International")
 				&& orgGrossIncome > 80000)
 			rating = "A++";
-		else if ((orgInterestRate <= 7 || orgInterestRate > 5) && scope.equalsIgnoreCase("International")
+		else if ((orgInterestRate <= 7 || orgInterestRate > 5) && scope.equalsIgnoreCase("international")
 				&& (orgGrossIncome >= 70000 || orgGrossIncome < 80000))
 			rating = "A+";
 		else if ((orgInterestRate <= 5 || orgInterestRate > 2) && scope.equalsIgnoreCase("International")
@@ -38,13 +38,13 @@ public class OrganizationSetConditions {
 		else if ((orgInterestRate <= 10 || orgInterestRate > 7) && scope.equalsIgnoreCase("national")
 				&& orgGrossIncome > 80000)
 			rating = "B++";
-		else if ((orgInterestRate <= 7 || orgInterestRate > 5) && scope.equalsIgnoreCase("national")
+		else if ((orgInterestRate <= 7 || orgInterestRate > 5) && scope.equalsIgnoreCase("National")
 				&& (orgGrossIncome >= 70000 || orgGrossIncome < 80000))
 			rating = "B+";
 		else if (orgInterestRate <= 5 || orgInterestRate > 2 && scope.equalsIgnoreCase("national")
 				&& orgGrossIncome < 80000 && orgGrossIncome > 5000)
 			rating = "B";
-		else if ((orgInterestRate <= 10 || orgInterestRate > 7) && scope.equalsIgnoreCase("state")
+		else if ((orgInterestRate <= 10 || orgInterestRate > 7) && scope.equalsIgnoreCase("State")
 				&& orgGrossIncome > 80000)
 			rating = "C++";
 		else if ((orgInterestRate <= 7 || orgInterestRate > 5) && scope.equalsIgnoreCase("state")
@@ -53,7 +53,7 @@ public class OrganizationSetConditions {
 		else if ((orgInterestRate <= 5 || orgInterestRate > 2) && scope.equalsIgnoreCase("state")
 				&& (orgGrossIncome < 80000 || orgGrossIncome > 5000))
 			rating = "C";
-		else if ((orgInterestRate <= 10 || orgInterestRate > 7) && scope.equalsIgnoreCase("Local")
+		else if ((orgInterestRate <= 10 || orgInterestRate > 7) && scope.equalsIgnoreCase("local")
 				&& orgGrossIncome > 80000)
 			rating = "C++";
 		else if ((orgInterestRate <= 7 || orgInterestRate > 5) && scope.equalsIgnoreCase("Local")
@@ -79,7 +79,7 @@ public class OrganizationSetConditions {
 	 * @return
 	 */
 	
-	public String setStatus(String userRating,String estimatedRating) {
+	public String generateStatus(String userRating,String estimatedRating) {
 		String status = "";
 		
 		if (userRating.equals(estimatedRating)) {

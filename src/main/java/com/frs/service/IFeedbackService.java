@@ -12,5 +12,7 @@ public interface IFeedbackService {
 	  Feedback addFeedback(Feedback feedback);
 
 	List<Feedback> viewFeedbackForOrg(int orgId);
+
+	List<Feedback> getAllFeedback();
 	 
 }

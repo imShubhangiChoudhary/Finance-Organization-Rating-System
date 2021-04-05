@@ -26,7 +26,6 @@ public class FinanceOrgRatingSystemApplication {
 		
 		SpringApplication.run(FinanceOrgRatingSystemApplication.class, args);
 		logger.info("Application Started");
-		System.out.println("***** Welcome to Financial Organization Rating System *****");
 				
 	}
 

@@ -16,28 +16,28 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import com.frs.model.Login;
 import com.frs.model.Organization;
 import com.frs.model.User;
-import com.frs.repository.LoginRepository;
-import com.frs.repository.OrganizationRepository;
-import com.frs.repository.UserRepository;
+import com.frs.repository.ILoginRepository;
+import com.frs.repository.IOrganizationRepository;
+import com.frs.repository.IUserRepository;
 import com.frs.service.IUserService;
 
 @SpringBootTest
-public class UserServiceTest {
+class UserServiceTest {
 
 	@Autowired
 	IUserService service;
 
 	@MockBean
-	OrganizationRepository orgRepositary;
+	IOrganizationRepository orgRepositary;
 
 	@MockBean
-	UserRepository userRepository;
+	IUserRepository userRepository;
 
 	@MockBean
-	LoginRepository loginrepository;
+	ILoginRepository loginrepository;
 
 	@Test
-	public void testAddUser() {
+	void testAddUser() {
 
 		User u = new User(15, "Pooja", "Vaidya", "Pooja@123", "pooja28@gmail.com", "9876543223", "Mumbai");
 		when(userRepository.save(u)).thenReturn(u);
@@ -56,9 +56,14 @@ public class UserServiceTest {
 	@Test
 	void testGetCompanyByRating() {
 		String orgRating = "A+";
+		Organization organization = new Organization("Capgemini", "IT consultancy", "capgemini2@gmail.com", 2,
+				"international", 45678, "A+");
+		organization.setOrgId(2);
+		organization.setStatus("Approved");
+		organization.setOrgRating("A+");
+
 		when(orgRepositary.findAllByOrgRating(orgRating))
-				.thenReturn(Stream.of(new Organization(1, "Cap", "A+", "Capgemini India", "capg123@gmail.com", 11,
-						"international", 50000, "A+", "Approved")).collect(Collectors.toList()));
+				.thenReturn(Stream.of(organization).collect(Collectors.toList()));
 		assertEquals(1, service.getAllCompany(orgRating).size());
 
 	}
@@ -67,12 +72,19 @@ public class UserServiceTest {
 	void testGetCompanyByName() {
 		String orgName = "Capgemini";
 
-		List<Organization> listOrg = Stream.of(
-				new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2, "international",
-						45678, "A+", "Approved"),
-				new Organization(3, "HDFC", "A", "Private corporation", "hdfcbank8@gmail.com", 3, "national", 98678,
-						"A", "Approved"))
-				.collect(Collectors.toList());
+		Organization organization = new Organization("Capgemini", "IT consultancy", "capgemini2@gmail.com", 2,
+				"international", 45678, "A+");
+		organization.setOrgId(2);
+		organization.setStatus("Approved");
+		organization.setOrgRating("A+");
+
+		Organization organization1 = new Organization("HDFC", "Private corporation", "hdfcbank8@gmail.com", 3,
+				"national", 98678, "A");
+		organization1.setOrgId(3);
+		organization1.setStatus("Approved");
+		organization1.setOrgRating("A");
+		List<Organization> listOrg = Stream.of(organization, organization1).collect(Collectors.toList());
+
 		orgRepositary.saveAll(listOrg);
 
 		when(orgRepositary.findAllByOrgName(orgName)).thenReturn(listOrg.get(0));
@@ -82,17 +94,23 @@ public class UserServiceTest {
 	@Test
 	void testGetCompanyById() {
 		int orgId = 2;
-		List<Organization> listOrgg = Stream.of(
-				new Organization(2, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2, "international",
-						45678, "A+", "Approved"),
-				new Organization(3, "HDFC", "A", "Private corporation", "hdfcbank8@gmail.com", 3, "national", 98678,
-						"A", "Approved"))
-				.collect(Collectors.toList());
+		Organization organization = new Organization("Capgemini", "IT consultancy", "capgemini2@gmail.com", 2,
+				"international", 45678, "A+");
+		organization.setOrgId(2);
+		organization.setStatus("Approved");
+		organization.setOrgRating("A+");
 
-		orgRepositary.saveAll(listOrgg);
+		Organization organization1 = new Organization("HDFC", "Private corporation", "hdfcbank8@gmail.com", 3,
+				"national", 98678, "A");
+		organization1.setOrgId(3);
+		organization1.setStatus("Approved");
+		organization1.setOrgRating("A");
+		List<Organization> listOrg = Stream.of(organization, organization1).collect(Collectors.toList());
 
-		when(orgRepositary.findById(orgId)).thenReturn(listOrgg.get(1));
-		assertEquals(listOrgg.get(1), service.getCompanyById(orgId));
+		orgRepositary.saveAll(listOrg);
+
+		when(orgRepositary.findById(orgId)).thenReturn(listOrg.get(1));
+		assertEquals(listOrg.get(1), service.getCompanyById(orgId));
 	}
 
 	@Test
@@ -116,12 +134,19 @@ public class UserServiceTest {
 	void testGetCompanyByNameFail() {
 		String orgName = "Capgemini";
 
-		List<Organization> listOrg = Stream.of(
-				new Organization(2, "Cap", "A+", "IT consultancy", "capgemini2@gmail.com", 2, "international", 45678,
-						"A+", "Approved"),
-				new Organization(3, "HDFC", "A", "Private corporation", "hdfcbank8@gmail.com", 3, "national", 98678,
-						"A", "Approved"))
-				.collect(Collectors.toList());
+		Organization organization = new Organization("Capgemini", "IT consultancy", "capgemini2@gmail.com", 2,
+				"international", 45678, "A+");
+		organization.setOrgId(2);
+		organization.setStatus("Approved");
+		organization.setOrgRating("A+");
+
+		Organization organization1 = new Organization("HDFC", "Private corporation", "hdfcbank8@gmail.com", 3,
+				"national", 98678, "A");
+		organization1.setOrgId(3);
+		organization1.setStatus("Approved");
+		organization1.setOrgRating("A");
+		List<Organization> listOrg = Stream.of(organization, organization1).collect(Collectors.toList());
+
 		orgRepositary.saveAll(listOrg);
 
 		when(orgRepositary.findAllByOrgName(orgName)).thenReturn(listOrg.get(0));
@@ -131,9 +156,14 @@ public class UserServiceTest {
 	@Test
 	void testGetCompanyByRatingFail() {
 		String orgRating = "A+";
+		Organization organization = new Organization("Capgemini", "IT consultancy", "capgemini2@gmail.com", 2,
+				"international", 45678, "A+");
+		organization.setOrgId(2);
+		organization.setStatus("Approved");
+		organization.setOrgRating("A+");
+
 		when(orgRepositary.findAllByOrgRating(orgRating))
-				.thenReturn(Stream.of(new Organization(1, "Cap", "A", "Capgemini India", "capg123@gmail.com", 11,
-						"international", 50000, "A", "Approved")).collect(Collectors.toList()));
+				.thenReturn(Stream.of(organization).collect(Collectors.toList()));
 		assertEquals(1, service.getAllCompany(orgRating).size());
 
 	}
@@ -141,14 +171,20 @@ public class UserServiceTest {
 	@Test
 	void testGetCompanyByIdFail() {
 		int orgId = 2;
-		List<Organization> listOrgg = Stream.of(
-				new Organization(4, "Capgemini", "A+", "IT consultancy", "capgemini2@gmail.com", 2, "international",
-						45678, "A+", "Approved"),
-				new Organization(3, "HDFC", "A", "Private corporation", "hdfcbank8@gmail.com", 3, "national", 98678,
-						"A", "Approved"))
-				.collect(Collectors.toList());
+		Organization organization = new Organization("Capgemini", "IT consultancy", "capgemini2@gmail.com", 2,
+				"international", 45678, "A+");
+		organization.setOrgId(2);
+		organization.setStatus("Approved");
+		organization.setOrgRating("A+");
 
-		orgRepositary.saveAll(listOrgg);
+		Organization organization1 = new Organization("HDFC", "Private corporation", "hdfcbank8@gmail.com", 3,
+				"national", 98678, "A");
+		organization1.setOrgId(3);
+		organization1.setStatus("Approved");
+		organization1.setOrgRating("A");
+		List<Organization> listOrg = Stream.of(organization, organization1).collect(Collectors.toList());
+
+		orgRepositary.saveAll(listOrg);
 
 		when(orgRepositary.findById(orgId)).thenReturn(null);
 		assertEquals(null, service.getCompanyById(orgId));

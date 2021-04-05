@@ -22,7 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  */
 
 @ControllerAdvice
-public class FRSException extends ResponseEntityExceptionHandler {
+public class FRSHandler extends ResponseEntityExceptionHandler {
 
 	/**
 	 * 
@@ -56,7 +56,7 @@ public class FRSException extends ResponseEntityExceptionHandler {
 	 * Handles the exceptions which are thrown due to validation of data
 	 * 
 	 */
-	
+	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		Map<String, String> errors = new HashMap<>();

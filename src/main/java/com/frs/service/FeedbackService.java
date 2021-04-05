@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.frs.model.Feedback;
-import com.frs.repository.FeedbackRepository;
+import com.frs.repository.IFeedbackRepository;
 
 /**
  * Use to view and add feedbacks
+ * 
  * @author G4
  * @version
  * @since 2020-2-5
@@ -21,27 +22,28 @@ import com.frs.repository.FeedbackRepository;
 @Transactional
 public class FeedbackService implements IFeedbackService {
 	@Autowired
-	FeedbackRepository feedbackRepository;
+	IFeedbackRepository feedbackRepository;
 
 	/**
 	 * This method is use to view feedback of user
+	 * 
 	 * @param userId
 	 * @return List<Feedback>
 	 */
-	
+
 	@Override
 	public List<Feedback> viewFeedback(int userId) {
 
 		return feedbackRepository.findAllByUserId(userId);
 	}
-	
+
 	/**
 	 * This method is use by to view feedback for organization
+	 * 
 	 * @param orgId
 	 * @return List<Feedback>
 	 */
-	
-	
+
 	@Override
 	public List<Feedback> viewFeedbackForOrg(int orgId) {
 
@@ -49,15 +51,22 @@ public class FeedbackService implements IFeedbackService {
 	}
 
 	/**
-	 * This method is use by user to add feedback 
+	 * This method is use by user to add feedback
+	 * 
 	 * @param feedback
 	 * @return Feedback
 	 */
-	
+
 	@Override
 	public Feedback addFeedback(Feedback feedback) {
 
 		return feedbackRepository.save(feedback);
+	}
+
+	@Override
+	public List<Feedback> getAllFeedback() {
+		
+		return feedbackRepository.findAll();
 	}
 
 }

@@ -14,7 +14,7 @@ public class Feedback {
 	String feedbackVal;
 
 	public Feedback() {
-		// TODO Auto-generated constructor stub
+
 	}
 	
 

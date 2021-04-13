@@ -31,7 +31,7 @@
 			<artifactId>validation-api</artifactId>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator   -->
 		<!-- for validation -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
